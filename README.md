@@ -50,7 +50,29 @@ yarn add @devoxa/i18next-test
 
 ## Usage
 
-TODO
+```bash
+i18next-test -c i18next-test.config.js
+```
+
+```js
+// i18next-test.config.js
+module.exports = {
+  i18n: {
+    // This is the default locale of your source files
+    defaultLocale: 'en',
+  },
+
+  // This is the path to your locale files on the file system
+  localePath: './public/locales',
+
+  // This is the (unused) default namespace of your translations
+  defaultNS: 'undefined',
+}
+```
+
+Note that the configuration file has the same structure as the
+[next-i18next](https://github.com/isaachinman/next-i18next#options) configuration, so you can pass
+the `next-i18next.config.js` as well! However, configuring the `localeStructure` is not supported.
 
 ## Contributors
 
