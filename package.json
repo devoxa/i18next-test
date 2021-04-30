@@ -3,6 +3,9 @@
   "description": "Check `i18next` locale files for missing translations and common errors.",
   "version": "0.0.0",
   "main": "dist/src/index.js",
+  "bin": {
+    "i18next-test": "dist/src/bin.js"
+  },
   "license": "MIT",
   "repository": {
     "url": "https://github.com/devoxa/i18next-test"
@@ -12,7 +15,7 @@
     "format": "prettier --ignore-path='.gitignore' --list-different --write .",
     "format:check": "prettier --ignore-path='.gitignore' --check .",
     "lint": "eslint --ignore-path='.gitignore' '{src,tests}/**/*.ts'",
-    "build": "rm -rf dist/ && tsc",
+    "build": "rm -rf dist/ && tsc && chmod +x dist/src/bin.js",
     "preversion": "yarn build"
   },
   "eslintConfig": {
@@ -20,7 +23,9 @@
   },
   "prettier": "@devoxa/prettier-config",
   "dependencies": {
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "commander": "^7.2.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@devoxa/eslint-config": "^2.0.5",
