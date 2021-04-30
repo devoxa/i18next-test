@@ -31,7 +31,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual([])
   })
 
-  it('errors when the locale file could not be parsed as JSON', () => {
+  it('errors when the locale file could not be parsed as JSON (1)', () => {
     const errors = testLocaleFile({
       fileContent: `{`,
       locale: 'de',
@@ -40,7 +40,19 @@ describe('i18next-test', () => {
       defaultNamespace: 'undefined',
     })
 
-    expect(errors).toEqual(['File content could not be parsed as JSON'])
+    expect(errors).toEqual(['File content could not be parsed as locale JSON'])
+  })
+
+  it('errors when the locale file could not be parsed as JSON (2)', () => {
+    const errors = testLocaleFile({
+      fileContent: JSON.stringify(['Foo']),
+      locale: 'de',
+      defaultLocale: 'en',
+      namespace: 'sign-in',
+      defaultNamespace: 'undefined',
+    })
+
+    expect(errors).toEqual(['File content could not be parsed as locale JSON'])
   })
 
   it('errors for keys that do not have a translation', () => {
@@ -85,6 +97,7 @@ describe('i18next-test', () => {
         'Sign in <0>here</0>': 'Sign in <0>here</0>', // OK
         'Sign in <1>here</1>': 'Sign in <2>here</2>', // FAIL (wrong name)
         'Sign in <2>here</2>': 'Sign in here', // FAIL (missing)
+        'Sign <1>Foo</1> in <2>Bar</2>': 'Sign <2>Foo</2> in <1>Bar</1>', // OK (other order)
       }),
       locale: 'en',
       defaultLocale: 'en',
@@ -108,6 +121,7 @@ Received: []`,
         'Sign in {{count1}}': 'Sign in {{count1}}', // OK
         'Sign in {{count2}}': 'Sign in {{countt2}}', // FAIL (wrong name)
         'Sign in {{count3}}': 'Sign in', // OK (missing)
+        'Sign {{foo}} in {{bar}}': 'Sign {{bar}} in {{foo}}', // OK (other order)
       }),
       locale: 'en',
       defaultLocale: 'en',
