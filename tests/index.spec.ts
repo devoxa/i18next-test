@@ -91,7 +91,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual([])
   })
 
-  it('errors for keys that have mismatching component markers in the translation', () => {
+  it('errors for keys that have mismatching component markers in the translation (1)', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in <0>here</0>': 'Sign in <0>here</0>', // OK
@@ -111,6 +111,30 @@ Expected: ["</1>","<1>"]
 Received: ["</2>","<2>"]`,
       `"Sign in <2>here</2>" has mismatching component markers in the translation
 Expected: ["</2>","<2>"]
+Received: []`,
+    ])
+  })
+
+  it('errors for keys that have mismatching component markers in the translation (2)', () => {
+    const errors = testLocaleFile({
+      fileContent: JSON.stringify({
+        'Sign in <0/>': 'Sign in <0/>', // OK
+        'Sign in <1/>': 'Sign in <2/>', // FAIL (wrong name)
+        'Sign in <2/>': 'Sign in', // FAIL (missing)
+        'Sign <1/> in <2/>': 'Sign <2/> in <1/>', // OK (other order)
+      }),
+      locale: 'en',
+      defaultLocale: 'en',
+      namespace: 'sign-in',
+      defaultNamespace: 'undefined',
+    })
+
+    expect(errors).toEqual([
+      `"Sign in <1/>" has mismatching component markers in the translation
+Expected: ["<1/>"]
+Received: ["<2/>"]`,
+      `"Sign in <2/>" has mismatching component markers in the translation
+Expected: ["<2/>"]
 Received: []`,
     ])
   })

@@ -41,14 +41,17 @@ export function testLocaleFile(options: TestLocaleFileOptions) {
 
     // We expect the count and name of the component markers to be exactly the same,
     // but the position does not matter since it might change in translated languages.
-    const componentMarkersKey = JSON.stringify(parseComponentMarkers(key))
-    const componentMarkersTranslation = JSON.stringify(parseComponentMarkers(localeMap[key]))
+    const componentMarkersKey = parseComponentMarkers(key)
+    const componentMarkersTranslation = parseComponentMarkers(localeMap[key])
 
-    if (componentMarkersKey !== componentMarkersTranslation) {
+    if (
+      JSON.stringify(sort(componentMarkersKey)) !==
+      JSON.stringify(sort(componentMarkersTranslation))
+    ) {
       const message = [
         colors.cyan(`"${key}"`) + ` has mismatching component markers in the translation`,
-        colors.green('Expected: ') + componentMarkersKey,
-        colors.red('Received: ') + componentMarkersTranslation,
+        colors.green('Expected: ') + JSON.stringify(sort(componentMarkersKey)),
+        colors.red('Received: ') + JSON.stringify(sort(componentMarkersTranslation)),
       ].join('\n')
 
       errors.push(message)
@@ -65,8 +68,8 @@ export function testLocaleFile(options: TestLocaleFileOptions) {
     if (hasUnknownMarker) {
       const message = [
         colors.cyan(`"${key}"`) + ` has mismatching interpolation markers in the translation`,
-        colors.green('Expected: ') + JSON.stringify(interpolationMarkersKey),
-        colors.red('Received: ') + JSON.stringify(interpolationMarkersTranslation),
+        colors.green('Expected: ') + JSON.stringify(sort(interpolationMarkersKey)),
+        colors.red('Received: ') + JSON.stringify(sort(interpolationMarkersTranslation)),
       ].join('\n')
 
       errors.push(message)
@@ -77,13 +80,13 @@ export function testLocaleFile(options: TestLocaleFileOptions) {
 }
 
 function parseComponentMarkers(string: string) {
-  const matches = Array.from(string.matchAll(/<.*?>/g)).map((x) => x[0])
-  matches.sort()
-  return matches
+  return Array.from(string.matchAll(/<.*?>/g)).map((x) => x[0])
 }
 
 function parseInterpolationMarkers(string: string) {
-  const matches = Array.from(string.matchAll(/\{\{.*?\}\}/g)).map((x) => x[0])
-  matches.sort()
-  return matches
+  return Array.from(string.matchAll(/\{\{.*?\}\}/g)).map((x) => x[0])
+}
+
+function sort<T>(array: Array<T>): Array<T> {
+  return [...array].sort()
 }
