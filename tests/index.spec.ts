@@ -139,6 +139,32 @@ Received: []`,
     ])
   })
 
+  it('errors for keys that have invalid component marker structure in the translation', () => {
+    const errors = testLocaleFile({
+      fileContent: JSON.stringify({
+        '1 A <0/> B <1>C</1> DE <2>F</2>': '1 AB <2>C</2> D <0/> E <1>F</1>', // OK
+        '2 A <0/> B <1>C</1> DE <2>F</2>': '2 AB <2>C</1> D <0/> E <1>F</2>', // FAIL (closing markers in wrong order)
+        '3 A <0/> B <1>C</1> DE <2>F</2>': '3 AB <2><1>C</1></2> D <0/> EF', // OK
+        '4 A <0/> B <1>C</1> DE <2>F</2>': '4 AB <2><1>C</2></1> D <0/> EF', // FAIL (closing markers in wrong order)
+        '5 A <0/> B <1>C</1> DE <2>F</2>': '5 AB </2><1>C</1><2> D <0/> EF', // FAIL (starting with closing marker)
+        '6 A <0/> B <1>C</1> DE <2>F</2>': '6 AB <1><2>C</2></1> D <0/> EF', // OK
+      }),
+      locale: 'en',
+      defaultLocale: 'en',
+      namespace: 'sign-in',
+      defaultNamespace: 'undefined',
+    })
+
+    expect(errors).toEqual([
+      `"2 A <0/> B <1>C</1> DE <2>F</2>" has invalid component marker structure in the translation
+Received: ["<2>","</1>","<0/>","<1>","</2>"]`,
+      `"4 A <0/> B <1>C</1> DE <2>F</2>" has invalid component marker structure in the translation
+Received: ["<2>","<1>","</2>","</1>","<0/>"]`,
+      `"5 A <0/> B <1>C</1> DE <2>F</2>" has invalid component marker structure in the translation
+Received: ["</2>","<1>","</1>","<2>","<0/>"]`,
+    ])
+  })
+
   it('errors for keys that have mismatching interpolation markers in the translation', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({

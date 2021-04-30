@@ -57,6 +57,16 @@ export function testLocaleFile(options: TestLocaleFileOptions) {
       errors.push(message)
     }
 
+    // Check that opened component markers are closed in the correct order.
+    if (!validComponentMarkerStructure(componentMarkersTranslation)) {
+      const message = [
+        colors.cyan(`"${key}"`) + ` has invalid component marker structure in the translation`,
+        colors.red('Received: ') + JSON.stringify(componentMarkersTranslation),
+      ].join('\n')
+
+      errors.push(message)
+    }
+
     // We expect the names of the interpolation markers to be exactly the same, but the position
     // does not matter, and they are allowed to be omitted (e.g. to replace `{{count}}` with `one`).
     const interpolationMarkersKey = parseInterpolationMarkers(key)
@@ -89,4 +99,29 @@ function parseInterpolationMarkers(string: string) {
 
 function sort<T>(array: Array<T>): Array<T> {
   return [...array].sort()
+}
+
+function validComponentMarkerStructure(componentMarkers: Array<string>) {
+  // Filter out self-closing tags since they don't require any structure
+  componentMarkers = componentMarkers.filter((x) => !x.match(/<.*\/>/))
+
+  const expectedClosingNames = []
+
+  for (const marker of componentMarkers) {
+    const matches = marker.match(/<(\/)?(.*)>/) as RegExpMatchArray
+    const isClosing = matches[1] === '/'
+    const name = matches[2]
+
+    if (!isClosing) {
+      expectedClosingNames.push(name)
+      continue
+    }
+
+    const expectedClosingName = expectedClosingNames.pop()
+    if (name !== expectedClosingName) {
+      return false
+    }
+  }
+
+  return true
 }
