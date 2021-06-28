@@ -24,7 +24,7 @@
   "prettier": "@devoxa/prettier-config",
   "dependencies": {
     "colors": "^1.4.0",
-    "commander": "^7.2.0",
+    "commander": "^8.0.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {
