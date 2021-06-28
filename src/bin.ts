@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import colors from 'colors/safe'
-import program from 'commander'
+import { program } from 'commander'
 import fs from 'fs'
 import path from 'path'
 import * as yup from 'yup'
