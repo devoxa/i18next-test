@@ -202,9 +202,9 @@ Received: ["{{countt2}}"]`,
 
     expect(errors).toEqual([
       `\"Login\" has prohibited text in the key
-Prohibited: /\\blog.?in\\b/i`,
+Prohibited: Login`,
       `\"Sign in to the page\" has prohibited text in the translation
-Prohibited: /\\blog.?in\\b/i`,
+Prohibited: Log in to the page`,
     ])
   })
 

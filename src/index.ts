@@ -1,5 +1,8 @@
 import colors from 'colors/safe'
 
+type KeysOfType<O, T> = { [K in keyof O]: O[K] extends T ? K : never }[keyof O]
+type ColorsOption = KeysOfType<typeof colors, (string: string) => string>
+
 export interface TestLocaleFileOptions {
   fileContent: string
   locale: string
@@ -92,19 +95,21 @@ export function testLocaleFile(pOptions: TestLocaleFileOptions) {
     // making sure that the overall voice of the translations is consistent (e.g. that we always
     // use "sign in" instead of "login")
     for (const prohibitedTextRegex of options.prohibitedText) {
-      if (key.match(prohibitedTextRegex)) {
+      const keyMatch = key.match(prohibitedTextRegex)
+      if (keyMatch) {
         const message = [
           colors.cyan(`"${key}"`) + ` has prohibited text in the key`,
-          colors.red('Prohibited: ') + prohibitedTextRegex.toString(),
+          colors.red('Prohibited: ') + colorByMatch('red', key, keyMatch),
         ].join('\n')
 
         errors.push(message)
       }
 
-      if (localeMap[key].match(prohibitedTextRegex)) {
+      const translationMatch = localeMap[key].match(prohibitedTextRegex)
+      if (translationMatch) {
         const message = [
           colors.cyan(`"${key}"`) + ` has prohibited text in the translation`,
-          colors.red('Prohibited: ') + prohibitedTextRegex.toString(),
+          colors.red('Prohibited: ') + colorByMatch('red', localeMap[key], translationMatch),
         ].join('\n')
 
         errors.push(message)
@@ -150,4 +155,15 @@ function validComponentMarkerStructure(componentMarkers: Array<string>) {
   }
 
   return true
+}
+
+function colorByMatch(color: ColorsOption, string: string, match: RegExpMatchArray) {
+  const startIndex = match.index || 0
+  const endIndex = startIndex + match[0].length
+
+  return [
+    string.slice(0, startIndex),
+    colors[color](string.slice(startIndex, endIndex)),
+    string.slice(endIndex),
+  ].join('')
 }
