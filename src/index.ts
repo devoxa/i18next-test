@@ -6,9 +6,12 @@ export interface TestLocaleFileOptions {
   defaultLocale: string
   namespace: string
   defaultNamespace: string
+  prohibitedText?: Array<RegExp>
 }
 
-export function testLocaleFile(options: TestLocaleFileOptions) {
+export function testLocaleFile(pOptions: TestLocaleFileOptions) {
+  const options = { prohibitedText: [], ...pOptions }
+
   let localeMap: Record<string, string>
   try {
     localeMap = JSON.parse(options.fileContent)
@@ -83,6 +86,29 @@ export function testLocaleFile(options: TestLocaleFileOptions) {
       ].join('\n')
 
       errors.push(message)
+    }
+
+    // We expect prohibited text not to be in the key or in the translation. This can be used for
+    // making sure that the overall voice of the translations is consistent (e.g. that we always
+    // use "sign in" instead of "login")
+    for (const prohibitedTextRegex of options.prohibitedText) {
+      if (key.match(prohibitedTextRegex)) {
+        const message = [
+          colors.cyan(`"${key}"`) + ` has prohibited text in the key`,
+          colors.red('Prohibited: ') + prohibitedTextRegex.toString(),
+        ].join('\n')
+
+        errors.push(message)
+      }
+
+      if (localeMap[key].match(prohibitedTextRegex)) {
+        const message = [
+          colors.cyan(`"${key}"`) + ` has prohibited text in the translation`,
+          colors.red('Prohibited: ') + prohibitedTextRegex.toString(),
+        ].join('\n')
+
+        errors.push(message)
+      }
     }
   }
 
