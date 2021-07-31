@@ -13,6 +13,7 @@ const CONFIG_SCHEMA = yup.object().shape({
   }),
   localePath: yup.string().required(),
   defaultNS: yup.string().required(),
+  prohibitedText: yup.array().of(yup.mixed().test((x) => x instanceof RegExp)),
 })
 
 program
@@ -50,6 +51,7 @@ function run() {
         defaultLocale: config.i18n.defaultLocale,
         namespace: path.basename(namespaceFile, path.extname(namespaceFile)),
         defaultNamespace: config.defaultNS,
+        prohibitedText: config.prohibitedText,
       })
 
       if (errors.length > 0) {

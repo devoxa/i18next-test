@@ -186,11 +186,11 @@ Received: ["{{countt2}}"]`,
     ])
   })
 
-  it('errors for keys that have prohibited text in the key or translation', () => {
+  it('errors for keys that have prohibited text in the translation', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in': 'Sign in', // OK
-        Login: 'Sign in', // FAIL
+        Login: 'Sign in', // OK, in the key
         'Sign in to the page': 'Log in to the page', // FAIL
       }),
       locale: 'en',
@@ -201,8 +201,6 @@ Received: ["{{countt2}}"]`,
     })
 
     expect(errors).toEqual([
-      `\"Login\" has prohibited text in the key
-Prohibited: Login`,
       `\"Sign in to the page\" has prohibited text in the translation
 Prohibited: Log in to the page`,
     ])

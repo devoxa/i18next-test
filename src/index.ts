@@ -91,20 +91,10 @@ export function testLocaleFile(pOptions: TestLocaleFileOptions) {
       errors.push(message)
     }
 
-    // We expect prohibited text not to be in the key or in the translation. This can be used for
-    // making sure that the overall voice of the translations is consistent (e.g. that we always
-    // use "sign in" instead of "login")
+    // We expect prohibited text not to be in the translation. This can be used for making
+    // sure that the overall voice of the translations is consistent (e.g. that we always
+    // use "sign in" instead of "login").
     for (const prohibitedTextRegex of options.prohibitedText) {
-      const keyMatch = key.match(prohibitedTextRegex)
-      if (keyMatch) {
-        const message = [
-          colors.cyan(`"${key}"`) + ` has prohibited text in the key`,
-          colors.red('Prohibited: ') + colorByMatch('red', key, keyMatch),
-        ].join('\n')
-
-        errors.push(message)
-      }
-
       const translationMatch = localeMap[key].match(prohibitedTextRegex)
       if (translationMatch) {
         const message = [

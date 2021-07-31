@@ -68,9 +68,9 @@ module.exports = {
   // This is the (unused) default namespace of your translations
   defaultNS: 'undefined',
 
-  // (Optional) This is an array of regular expressions describing text that should not be in the key
-  // or in the translation. It can be used for making sure that the overall voice of the translations
-  // is consistent (e.g. that "sign in" is always used instead of "login")
+  // (Optional) This is an array of regular expressions describing text that should not be in the
+  // translations. It can be used for making sure that the overall voice of the translations
+  // is consistent (e.g. that "sign in" is always used instead of "login").
   prohibitedText: [/\blog.?in\b/i],
 }
 ```
