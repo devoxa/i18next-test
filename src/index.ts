@@ -1,14 +1,20 @@
 import colors from 'colors/safe'
 
+type KeysOfType<O, T> = { [K in keyof O]: O[K] extends T ? K : never }[keyof O]
+type ColorsOption = KeysOfType<typeof colors, (string: string) => string>
+
 export interface TestLocaleFileOptions {
   fileContent: string
   locale: string
   defaultLocale: string
   namespace: string
   defaultNamespace: string
+  prohibitedText?: Array<RegExp>
 }
 
-export function testLocaleFile(options: TestLocaleFileOptions) {
+export function testLocaleFile(pOptions: TestLocaleFileOptions) {
+  const options = { prohibitedText: [], ...pOptions }
+
   let localeMap: Record<string, string>
   try {
     localeMap = JSON.parse(options.fileContent)
@@ -84,6 +90,31 @@ export function testLocaleFile(options: TestLocaleFileOptions) {
 
       errors.push(message)
     }
+
+    // We expect prohibited text not to be in the key or in the translation. This can be used for
+    // making sure that the overall voice of the translations is consistent (e.g. that we always
+    // use "sign in" instead of "login")
+    for (const prohibitedTextRegex of options.prohibitedText) {
+      const keyMatch = key.match(prohibitedTextRegex)
+      if (keyMatch) {
+        const message = [
+          colors.cyan(`"${key}"`) + ` has prohibited text in the key`,
+          colors.red('Prohibited: ') + colorByMatch('red', key, keyMatch),
+        ].join('\n')
+
+        errors.push(message)
+      }
+
+      const translationMatch = localeMap[key].match(prohibitedTextRegex)
+      if (translationMatch) {
+        const message = [
+          colors.cyan(`"${key}"`) + ` has prohibited text in the translation`,
+          colors.red('Prohibited: ') + colorByMatch('red', localeMap[key], translationMatch),
+        ].join('\n')
+
+        errors.push(message)
+      }
+    }
   }
 
   return errors
@@ -124,4 +155,15 @@ function validComponentMarkerStructure(componentMarkers: Array<string>) {
   }
 
   return true
+}
+
+function colorByMatch(color: ColorsOption, string: string, match: RegExpMatchArray) {
+  const startIndex = match.index || 0
+  const endIndex = startIndex + match[0].length
+
+  return [
+    string.slice(0, startIndex),
+    colors[color](string.slice(startIndex, endIndex)),
+    string.slice(endIndex),
+  ].join('')
 }

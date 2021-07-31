@@ -186,6 +186,28 @@ Received: ["{{countt2}}"]`,
     ])
   })
 
+  it('errors for keys that have prohibited text in the key or translation', () => {
+    const errors = testLocaleFile({
+      fileContent: JSON.stringify({
+        'Sign in': 'Sign in', // OK
+        Login: 'Sign in', // FAIL
+        'Sign in to the page': 'Log in to the page', // FAIL
+      }),
+      locale: 'en',
+      defaultLocale: 'en',
+      namespace: 'sign-in',
+      defaultNamespace: 'undefined',
+      prohibitedText: [/\blog.?in\b/i],
+    })
+
+    expect(errors).toEqual([
+      `\"Login\" has prohibited text in the key
+Prohibited: Login`,
+      `\"Sign in to the page\" has prohibited text in the translation
+Prohibited: Log in to the page`,
+    ])
+  })
+
   // We use i18next-parser, which extracts unused keys into namespaces suffixed with `_old`
   it('errors for keys that are tagged as removed from source code', () => {
     const errors = testLocaleFile({
