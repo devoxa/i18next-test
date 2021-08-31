@@ -81,6 +81,7 @@ function loadConfig(configPath: string) {
     } else {
       console.log('error: config file could not be loaded: ' + err.message)
     }
+
     process.exit(1)
   }
 
