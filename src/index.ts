@@ -41,7 +41,8 @@ export function testLocaleFile(pOptions: TestLocaleFileOptions) {
       errors.push(colors.cyan(`"${key}"`) + ` does not have a translation`)
     }
 
-    if (options.locale !== options.defaultLocale && localeMap[key] === key) {
+    const maybeSameWord = key.length < 24 && !key.includes(' ')
+    if (options.locale !== options.defaultLocale && localeMap[key] === key && !maybeSameWord) {
       errors.push(colors.cyan(`"${key}"`) + ` has a translation equal to the source language`)
     }
 

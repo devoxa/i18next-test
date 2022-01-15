@@ -91,6 +91,18 @@ describe('i18next-test', () => {
     expect(errors).toEqual([])
   })
 
+  it('passes for keys that have a translation equal to the source language but are the same word in both', () => {
+    const errors = testLocaleFile({
+      fileContent: JSON.stringify({ 'Name': 'Name' }),
+      locale: 'de',
+      defaultLocale: 'en',
+      namespace: 'sign-in',
+      defaultNamespace: 'undefined',
+    })
+
+    expect(errors).toEqual([])
+  })
+
   it('errors for keys that have mismatching component markers in the translation (1)', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
