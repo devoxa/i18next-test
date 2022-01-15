@@ -93,7 +93,7 @@ describe('i18next-test', () => {
 
   it('passes for keys that have a translation equal to the source language but are the same word in both', () => {
     const errors = testLocaleFile({
-      fileContent: JSON.stringify({ 'Name': 'Name' }),
+      fileContent: JSON.stringify({ Name: 'Name' }),
       locale: 'de',
       defaultLocale: 'en',
       namespace: 'sign-in',
