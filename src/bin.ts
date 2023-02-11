@@ -51,7 +51,7 @@ function run() {
         defaultLocale: config.i18n.defaultLocale,
         namespace: path.basename(namespaceFile, path.extname(namespaceFile)),
         defaultNamespace: config.defaultNS,
-        prohibitedText: config.prohibitedText,
+        prohibitedText: (config.prohibitedText || []) as Array<RegExp>,
       })
 
       if (errors.length > 0) {
