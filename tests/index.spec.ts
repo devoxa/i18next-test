@@ -14,6 +14,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([])
@@ -26,6 +27,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([])
@@ -38,6 +40,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual(['File content could not be parsed as locale JSON'])
@@ -50,6 +53,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual(['File content could not be parsed as locale JSON'])
@@ -62,6 +66,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual(['"Sign in" does not have a translation'])
@@ -74,6 +79,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual(['"Sign in" has a translation equal to the source language'])
@@ -86,6 +92,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([])
@@ -98,6 +105,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([])
@@ -115,6 +123,7 @@ describe('i18next-test', () => {
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([
@@ -139,6 +148,7 @@ Received: []`,
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([
@@ -165,6 +175,7 @@ Received: []`,
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([
@@ -189,6 +200,7 @@ Received: ["</2>","<1>","</1>","<2>","<0/>"]`,
       defaultLocale: 'en',
       namespace: 'sign-in',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([
@@ -228,6 +240,7 @@ Prohibited: Log in to the page`,
       defaultLocale: 'en',
       namespace: 'sign-in_old',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([`"Sign in" is tagged as removed from source code`])
@@ -242,6 +255,7 @@ Prohibited: Log in to the page`,
       defaultLocale: 'en',
       namespace: 'undefined',
       defaultNamespace: 'undefined',
+      prohibitedText: [],
     })
 
     expect(errors).toEqual([`"Sign in" is missing an explicit namespace`])
