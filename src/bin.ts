@@ -3,17 +3,17 @@ import colors from 'colors/safe'
 import { program } from 'commander'
 import fs from 'fs'
 import path from 'path'
-import * as yup from 'yup'
+import { z } from 'zod'
 import { testLocaleFile } from '.'
 import pkg from '../package.json'
 
-const CONFIG_SCHEMA = yup.object().shape({
-  i18n: yup.object().required().shape({
-    defaultLocale: yup.string().required(),
+const CONFIG_SCHEMA = z.object({
+  i18n: z.object({
+    defaultLocale: z.string(),
   }),
-  localePath: yup.string().required(),
-  defaultNS: yup.string().required(),
-  prohibitedText: yup.array().of(yup.mixed().test((x) => x instanceof RegExp)),
+  localePath: z.string(),
+  defaultNS: z.string(),
+  prohibitedText: z.array(z.custom<RegExp>((value) => value instanceof RegExp)).default([]),
 })
 
 program
@@ -51,7 +51,7 @@ function run() {
         defaultLocale: config.i18n.defaultLocale,
         namespace: path.basename(namespaceFile, path.extname(namespaceFile)),
         defaultNamespace: config.defaultNS,
-        prohibitedText: (config.prohibitedText || []) as Array<RegExp>,
+        prohibitedText: config.prohibitedText,
       })
 
       if (errors.length > 0) {
@@ -86,7 +86,7 @@ function loadConfig(configPath: string) {
   }
 
   try {
-    return CONFIG_SCHEMA.validateSync(config)
+    return CONFIG_SCHEMA.parse(config)
   } catch (err) {
     console.log('error: config file is invalid: ' + err.message)
     process.exit(1)
