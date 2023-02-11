@@ -9,12 +9,10 @@ export interface TestLocaleFileOptions {
   defaultLocale: string
   namespace: string
   defaultNamespace: string
-  prohibitedText?: Array<RegExp>
+  prohibitedText: Array<RegExp>
 }
 
-export function testLocaleFile(pOptions: TestLocaleFileOptions) {
-  const options = { prohibitedText: [], ...pOptions }
-
+export function testLocaleFile(options: TestLocaleFileOptions) {
   let localeMap: Record<string, string>
   try {
     localeMap = JSON.parse(options.fileContent)
