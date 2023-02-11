@@ -20,6 +20,7 @@ program
   .name('i18next-test')
   .version(pkg.version)
   .requiredOption('-c, --config <path>', 'Path to the config file')
+  .option('-s, --silent', 'Disable logging and only show errors')
 
 program.on('--help', function () {
   console.log('')
@@ -36,11 +37,6 @@ function run() {
   const config = loadConfig(program.opts().config)
 
   let hasErrors = false
-  console.log()
-  console.log(colors.cyan('  i18next Test'))
-  console.log(colors.cyan('  ------------'))
-  console.log()
-
   for (const localeDirectory of fs.readdirSync(config.localePath)) {
     for (const namespaceFile of fs.readdirSync(path.join(config.localePath, localeDirectory))) {
       const filePath = path.join(config.localePath, localeDirectory, namespaceFile)
@@ -56,15 +52,14 @@ function run() {
 
       if (errors.length > 0) {
         hasErrors = true
-        console.log(colors.red('  [fail] ') + filePath)
-        printErrors(errors, '         ')
-      } else {
-        console.log(colors.green('  [pass] ') + filePath)
+        console.log(colors.red('[fail] ') + filePath)
+        printErrors(errors, '       ')
+      } else if (!program.opts().silent) {
+        console.log(colors.green('[pass] ') + filePath)
       }
     }
   }
 
-  console.log()
   if (hasErrors) {
     process.exit(1)
   }
