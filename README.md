@@ -57,16 +57,15 @@ i18next-test -c i18next-test.config.js
 ```js
 // i18next-test.config.js
 module.exports = {
-  i18n: {
-    // This is the default locale of your source files
-    defaultLocale: 'en',
-  },
+  // This is the default locale of your source files
+  defaultLocale: 'en',
 
-  // This is the path to your locale files on the file system
+  // This is the path to your locale files on the file system, with the files named
+  // following the `${localePath}/${locale}/${namespace}.json` pattern
   localePath: './public/locales',
 
   // This is the (unused) default namespace of your translations
-  defaultNS: 'undefined',
+  defaultNamespace: 'undefined',
 
   // (Optional) This is an array of regular expressions describing text that should not be in the
   // translations. It can be used for making sure that the overall voice of the translations
@@ -75,9 +74,9 @@ module.exports = {
 }
 ```
 
-Note that the configuration file has the same structure as the
-[next-i18next](https://github.com/isaachinman/next-i18next#options) configuration, so you can pass
-the `next-i18next.config.js` as well! However, configuring the `localeStructure` is not supported.
+Note that the configuration file has a similar structure to
+[`i18next-parser`](https://github.com/i18next/i18next-parser), so you can use a single file for
+both.
 
 ## Contributors
 
