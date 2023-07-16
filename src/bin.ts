@@ -8,11 +8,9 @@ import { testLocaleFile } from '.'
 import pkg from '../package.json'
 
 const CONFIG_SCHEMA = z.object({
-  i18n: z.object({
-    defaultLocale: z.string(),
-  }),
+  defaultLocale: z.string(),
   localePath: z.string(),
-  defaultNS: z.string(),
+  defaultNamespace: z.string(),
   prohibitedText: z.array(z.custom<RegExp>((value) => value instanceof RegExp)).default([]),
 })
 
@@ -44,9 +42,9 @@ function run() {
       const errors = testLocaleFile({
         fileContent: fs.readFileSync(filePath, 'utf-8'),
         locale: localeDirectory,
-        defaultLocale: config.i18n.defaultLocale,
+        defaultLocale: config.defaultLocale,
         namespace: path.basename(namespaceFile, path.extname(namespaceFile)),
-        defaultNamespace: config.defaultNS,
+        defaultNamespace: config.defaultNamespace,
         prohibitedText: config.prohibitedText,
       })
 
