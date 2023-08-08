@@ -7,7 +7,7 @@ jest.mock('colors/safe', () => ({
 }))
 
 describe('i18next-test', () => {
-  it('passes for a valid locale file in the default language', () => {
+  test('passes for a valid locale file in the default language', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({ 'Sign in': 'Sign in' }),
       locale: 'en',
@@ -20,7 +20,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual([])
   })
 
-  it('passes for a valid locale file in the translated language', () => {
+  test('passes for a valid locale file in the translated language', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({ 'Sign in': 'Anmelden' }),
       locale: 'de',
@@ -33,7 +33,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual([])
   })
 
-  it('errors when the locale file could not be parsed as JSON (1)', () => {
+  test('errors when the locale file could not be parsed as JSON (1)', () => {
     const errors = testLocaleFile({
       fileContent: `{`,
       locale: 'de',
@@ -46,7 +46,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual(['File content could not be parsed as locale JSON'])
   })
 
-  it('errors when the locale file could not be parsed as JSON (2)', () => {
+  test('errors when the locale file could not be parsed as JSON (2)', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify(['Foo']),
       locale: 'de',
@@ -59,7 +59,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual(['File content could not be parsed as locale JSON'])
   })
 
-  it('errors for keys that do not have a translation', () => {
+  test('errors for keys that do not have a translation', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({ 'Sign in': '' }),
       locale: 'en',
@@ -72,7 +72,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual(['"Sign in" does not have a translation'])
   })
 
-  it('errors for keys that have a translation equal to the source language', () => {
+  test('errors for keys that have a translation equal to the source language', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({ 'Sign in': 'Sign in' }),
       locale: 'de',
@@ -85,7 +85,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual(['"Sign in" has a translation equal to the source language'])
   })
 
-  it('passes for keys that have a translation equal to the source language in the default language', () => {
+  test('passes for keys that have a translation equal to the source language in the default language', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({ 'Sign in': 'Sign in' }),
       locale: 'en',
@@ -98,7 +98,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual([])
   })
 
-  it('passes for keys that have a translation equal to the source language but are the same word in both', () => {
+  test('passes for keys that have a translation equal to the source language but are the same word in both', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({ Name: 'Name' }),
       locale: 'de',
@@ -111,7 +111,7 @@ describe('i18next-test', () => {
     expect(errors).toEqual([])
   })
 
-  it('errors for keys that have mismatching component markers in the translation (1)', () => {
+  test('errors for keys that have mismatching component markers in the translation (1)', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in <0>here</0>': 'Sign in <0>here</0>', // OK
@@ -136,7 +136,7 @@ Received: []`,
     ])
   })
 
-  it('errors for keys that have mismatching component markers in the translation (2)', () => {
+  test('errors for keys that have mismatching component markers in the translation (2)', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in <0/>': 'Sign in <0/>', // OK
@@ -161,7 +161,7 @@ Received: []`,
     ])
   })
 
-  it('errors for keys that have invalid component marker structure in the translation', () => {
+  test('errors for keys that have invalid component marker structure in the translation', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         '1 A <0/> B <1>C</1> DE <2>F</2>': '1 AB <2>C</2> D <0/> E <1>F</1>', // OK
@@ -188,7 +188,7 @@ Received: ["</2>","<1>","</1>","<2>","<0/>"]`,
     ])
   })
 
-  it('errors for keys that have mismatching interpolation markers in the translation', () => {
+  test('errors for keys that have mismatching interpolation markers in the translation', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in {{count1}}': 'Sign in {{count1}}', // OK
@@ -210,7 +210,7 @@ Received: ["{{countt2}}"]`,
     ])
   })
 
-  it('errors for keys that have prohibited text in the translation', () => {
+  test('errors for keys that have prohibited text in the translation', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in': 'Sign in', // OK
@@ -231,7 +231,7 @@ Prohibited: Log in to the page`,
   })
 
   // We use i18next-parser, which extracts unused keys into namespaces suffixed with `_old`
-  it('errors for keys that are tagged as removed from source code', () => {
+  test('errors for keys that are tagged as removed from source code', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in': 'Anmelden',
@@ -246,7 +246,7 @@ Prohibited: Log in to the page`,
     expect(errors).toEqual([`"Sign in" is tagged as removed from source code`])
   })
 
-  it('errors for keys that are missing an explicit namespace', () => {
+  test('errors for keys that are missing an explicit namespace', () => {
     const errors = testLocaleFile({
       fileContent: JSON.stringify({
         'Sign in': 'Sign in',
