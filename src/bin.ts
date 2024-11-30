@@ -69,7 +69,9 @@ function loadConfig(configPath: string) {
   try {
     config = require(path.resolve(configPath))
   } catch (err) {
-    if (err.code === 'MODULE_NOT_FOUND') {
+    if (!(err instanceof Error)) throw err
+
+    if ('code' in err && err.code === 'MODULE_NOT_FOUND') {
       console.log('error: config file does not exist: ' + program.opts().config)
     } else {
       console.log('error: config file could not be loaded: ' + err.message)
@@ -81,6 +83,8 @@ function loadConfig(configPath: string) {
   try {
     return CONFIG_SCHEMA.parse(config)
   } catch (err) {
+    if (!(err instanceof Error)) throw err
+
     console.log('error: config file is invalid: ' + err.message)
     process.exit(1)
   }

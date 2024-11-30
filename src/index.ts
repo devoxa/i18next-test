@@ -16,7 +16,7 @@ export function testLocaleFile(options: TestLocaleFileOptions) {
   let localeMap: Record<string, string>
   try {
     localeMap = JSON.parse(options.fileContent)
-  } catch (err) {
+  } catch {
     return ['File content could not be parsed as locale JSON']
   }
 
