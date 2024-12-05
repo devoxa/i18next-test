@@ -14,6 +14,8 @@ const CONFIG_SCHEMA = z.object({
   prohibitedText: z.array(z.custom<RegExp>((value) => value instanceof RegExp)).default([]),
 })
 
+type Config = z.infer<typeof CONFIG_SCHEMA>
+
 program
   .name('i18next-test')
   .version(pkg.version)
@@ -31,8 +33,8 @@ program.on('--help', function () {
 program.parse(process.argv)
 run()
 
-function run() {
-  const config = loadConfig(program.opts().config)
+function run(): void {
+  const config = loadConfig(program.opts().config as string)
 
   let hasErrors = false
   for (const localeDirectory of fs.readdirSync(config.localePath)) {
@@ -63,11 +65,12 @@ function run() {
   }
 }
 
-function loadConfig(configPath: string) {
+function loadConfig(configPath: string): Config {
   let config = {}
 
   try {
-    config = require(path.resolve(configPath))
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    config = require(path.resolve(configPath)) as object
   } catch (err) {
     if (!(err instanceof Error)) throw err
 
@@ -90,7 +93,7 @@ function loadConfig(configPath: string) {
   }
 }
 
-function printErrors(errors: Array<string>, padding: string) {
+function printErrors(errors: Array<string>, padding: string): void {
   for (const error of errors) {
     const lines = error.split('\n')
 
