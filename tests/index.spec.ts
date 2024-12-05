@@ -1,9 +1,9 @@
 import { testLocaleFile } from '../src/index'
 
 jest.mock('colors/safe', () => ({
-  cyan: (x: string) => x,
-  green: (x: string) => x,
-  red: (x: string) => x,
+  cyan: (x: string): string => x,
+  green: (x: string): string => x,
+  red: (x: string): string => x,
 }))
 
 describe('i18next-test', () => {
@@ -35,7 +35,7 @@ describe('i18next-test', () => {
 
   test('errors when the locale file could not be parsed as JSON (1)', () => {
     const errors = testLocaleFile({
-      fileContent: `{`,
+      fileContent: '{',
       locale: 'de',
       defaultLocale: 'en',
       namespace: 'sign-in',
@@ -225,7 +225,7 @@ Received: ["{{countt2}}"]`,
     })
 
     expect(errors).toEqual([
-      `\"Sign in to the page\" has prohibited text in the translation
+      `"Sign in to the page" has prohibited text in the translation
 Prohibited: Log in to the page`,
     ])
   })
@@ -243,7 +243,7 @@ Prohibited: Log in to the page`,
       prohibitedText: [],
     })
 
-    expect(errors).toEqual([`"Sign in" is tagged as removed from source code`])
+    expect(errors).toEqual(['"Sign in" is tagged as removed from source code'])
   })
 
   test('errors for keys that are missing an explicit namespace', () => {
@@ -258,6 +258,6 @@ Prohibited: Log in to the page`,
       prohibitedText: [],
     })
 
-    expect(errors).toEqual([`"Sign in" is missing an explicit namespace`])
+    expect(errors).toEqual(['"Sign in" is missing an explicit namespace'])
   })
 })
