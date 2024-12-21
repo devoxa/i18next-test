@@ -1,6 +1,6 @@
 {
   "name": "@devoxa/i18next-test",
-  "description": "Check `i18next` locale files for missing translations and common errors.",
+  "description": "Check `i18next` locale files for missing translations and common errors",
   "version": "3.0.1",
   "main": "dist/src/index.js",
   "bin": {

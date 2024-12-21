@@ -5,7 +5,7 @@
 
 <!-- Description -->
 <h4 align="center">
-  Check <code>i18next</code> locale files for missing translations and common errors.
+  Check <code>i18next</code> locale files for missing translations and common errors
 </h4>
 
 <!-- Badges -->
