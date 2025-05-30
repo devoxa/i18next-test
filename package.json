@@ -22,7 +22,7 @@
   "dependencies": {
     "colors": "1.4.0",
     "commander": "12.1.0",
-    "zod": "3.25.39"
+    "zod": "3.25.41"
   },
   "devDependencies": {
     "@devoxa/eslint-config": "4.0.2",
